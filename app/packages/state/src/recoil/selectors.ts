@@ -355,6 +355,7 @@ export type Method = {
   supportsPrompts: boolean;
   maxK: number;
   supportsLeastSimilarity: boolean;
+  method: string;
 };
 
 export const similarityMethods = selector<{
@@ -380,13 +381,14 @@ export const similarityMethods = selector<{
               supportsPrompts,
               supportsLeastSimilarity,
               maxK,
+              method,
             },
             key,
           }
         ) => {
           if (patchesField) {
             patches.push([
-              { key, supportsPrompts, supportsLeastSimilarity, maxK },
+              { key, supportsPrompts, supportsLeastSimilarity, maxK, method },
               patchesField,
             ]);
           } else {
@@ -395,6 +397,7 @@ export const similarityMethods = selector<{
               supportsPrompts,
               supportsLeastSimilarity,
               maxK,
+              method,
             });
           }
           return { patches, samples };
@@ -422,6 +425,22 @@ export const extendedStagesUnsorted = selector({
         sampleIds && sampleIds.length
           ? { sample_ids: sampleIds, ordered: false }
           : undefined,
+    };
+  },
+});
+
+export const similarityMethodMap = selector<{
+  [key: string]: Omit<Method, "key">;
+}>({
+  key: "string",
+  get: ({ get }) => {
+    const methods = get(similarityMethods);
+    const patches = methods.patches.map(([{ key, ...rest }]) => [key, rest]);
+    const samples = methods.samples.map(({ key, ...rest }) => [key, rest]);
+
+    return {
+      ...Object.fromEntries(patches),
+      ...Object.fromEntries(samples),
     };
   },
 });

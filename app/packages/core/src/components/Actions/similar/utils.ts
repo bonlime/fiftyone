@@ -81,6 +81,9 @@ export const useSortBySimilarity = (close) => {
         const view = await snapshot.getPromise(fos.view);
         const subscription = await snapshot.getPromise(fos.stateSubscription);
 
+        const method = (await snapshot.getPromise(fos.similarityMethodMap))[
+          parameters.brainKey
+        ];
         const { query, ...commonParams } = parameters;
 
         const combinedParameters = {
