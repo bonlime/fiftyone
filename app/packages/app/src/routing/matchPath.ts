@@ -23,7 +23,7 @@ const compilePath = (path: string): CompilePathResult => {
   return result;
 };
 
-export type LocationState<T extends OperationType> = {
+export type LocationState<T extends OperationType = OperationType> = {
   view?: State.Stage[];
   savedViewSlug?: string;
   extendedStages?: State.Stage[];

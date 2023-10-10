@@ -34,7 +34,7 @@ EventType = t.Union[
     "SetGroupSlice",
     "SetSpaces",
     "StateUpdate",
-    "SetFieldVisibilityStage",
+    "SetFieldVisibility",
 ]
 
 _camel_to_snake = re.compile(r"(?<!^)(?=[A-Z])")
@@ -218,17 +218,9 @@ class SetGroupSlice(Event):
 
 
 @dataclass
-class FieldVisibilityKwargs(Event):
-    """Set field visibility eventt"""
-
-    fieldNames: t.List[str]
-    _allowMissing: bool
-
-
-@dataclass
-class SetFieldVisibilityStage(Event):
-    _cls: str
-    kwargs: FieldVisibilityKwargs
+class SetFieldVisibility(Event):
+    cls: str
+    field_names: t.List[str]
 
 
 @dataclass

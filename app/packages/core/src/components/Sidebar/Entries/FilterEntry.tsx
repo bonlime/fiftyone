@@ -20,9 +20,7 @@ const Filter = ({ modal }: { modal: boolean }) => {
   );
 
   const setSchemaModal = useSetRecoilState(fos.settingsModal);
-  const resetSelectedFieldStages = useResetRecoilState(
-    fos.selectedFieldsStageState
-  );
+  const resetSelectedFieldStages = useResetRecoilState(fos.fieldVisibility);
 
   const {
     resetTextFilter,

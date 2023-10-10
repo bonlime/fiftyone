@@ -82,7 +82,7 @@ class Mutation(SetColorScheme):
         print("\n\nmutation:set_field_visibility_stage", input)
         await dispatch_event(
             subscription,
-            fose.SetFieldVisibilityStage(input.cls, input.kwargs),
+            fose.SetFieldVisibility(input.cls, input.kwargs),
         )
         return True
 

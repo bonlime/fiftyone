@@ -8,11 +8,6 @@ import {
   datasetFragment$key,
   graphQLSyncFragmentAtom,
 } from "@fiftyone/relay";
-import {
-  fieldVisibilityStage,
-  fieldVisibilityStage,
-  selectedFieldsStageState,
-} from "@fiftyone/state";
 import { toSnakeCase } from "@fiftyone/utilities";
 import { DefaultValue, atomFamily, selector, selectorFamily } from "recoil";
 import { v4 as uuid } from "uuid";
@@ -20,7 +15,7 @@ import * as atoms from "./atoms";
 import { config } from "./config";
 import { currentModalSample, modalSample } from "./modal";
 import { pathFilter } from "./pathFilters";
-import { fieldSchema } from "./schema";
+import { fieldVisibility } from "./schemaSettings.atoms";
 import { State } from "./types";
 import { isPatchesView } from "./view";
 
@@ -440,53 +435,28 @@ export const extendedStages = selector({
   key: "extendedStages",
   get: ({ get }) => {
     const similarity = get(atoms.similarityParameters);
-    const selectFieldsStage = get(selectedFieldsStageState) as {
-      _cls: string;
-      kwargs: {};
-    };
 
-    const fvStage = get(fieldVisibilityStage);
-    const finalFieldVisibilityStage = fvStage
+    const stage = get(fieldVisibility);
+    const visibility = stage
       ? {
-          [fvStage["cls"]]: {
-            field_names: fvStage["kwargs"]["field_names"],
-            _allow_missing: fvStage["kwargs"]["allow_missing"],
-          },
+          [stage._cls]: stage.kwargs,
         }
       : {};
-    console.log(
-      "extendedStages:fieldVisibilityStage",
-      fvStage,
-      "\n",
-      finalFieldVisibilityStage
-    );
 
-    console.log("finalFieldVisibilityStage", finalFieldVisibilityStage);
-
-    const res = {
+    return {
       ...get(extendedStagesUnsorted),
       "fiftyone.core.stages.SortBySimilarity": similarity
         ? toSnakeCase(similarity)
         : undefined,
-      // ...(selectFieldsStage
-      //   ? { [selectFieldsStage["_cls"]]: selectFieldsStage["kwargs"] }
-      //   : {}),
-      ...(finalFieldVisibilityStage ? finalFieldVisibilityStage : {}),
+      ...visibility,
     };
-    console.log("extendedStages", res);
-    return res;
   },
 });
 
 export const mediaFields = selector<string[]>({
   key: "string",
   get: ({ get }) => {
-    const selectedFields = Object.keys(
-      get(fieldSchema({ space: State.SPACE.SAMPLE }))
-    );
-    return (get(atoms.dataset)?.appConfig?.mediaFields || []).filter((field) =>
-      selectedFields.includes(field)
-    );
+    return get(atoms.dataset)?.appConfig?.mediaFields || [];
   },
 });
 

@@ -4,7 +4,7 @@ import {
   EMBEDDED_DOCUMENT_FIELD,
   LIST_FIELD,
 } from "@fiftyone/utilities";
-import { DefaultValue, atom, atomFamily, selector } from "recoil";
+import { DefaultValue, RecoilState, atom, atomFamily, selector } from "recoil";
 import { disabledField, skipField } from "../hooks/useSchemaSettings.utils";
 import { sessionAtom } from "../session";
 
@@ -292,22 +292,17 @@ export const excludedPathsState = atomFamily({
   ],
 });
 
-export const selectedFieldsStageState = sessionAtom({
-  key: "selectedFields",
-  default: null,
-});
-
-export const fieldVisibilityStage = sessionAtom({
-  key: "fieldVisibilityStage",
-  default: null,
-});
+export const fieldVisibility: RecoilState<fos.State.FieldVisibilityStage> =
+  sessionAtom({
+    key: "fieldVisibility",
+    default: null,
+  });
 
 export const isFieldVisibilityActive = selector({
   key: "isClearFieldVisibilityVisible",
   get: ({ get }) => {
-    const isSelectedFieldsStageActive = get(fos.selectedFieldsStageState);
     const affectedCount = get(fos.affectedPathCountState);
 
-    return isSelectedFieldsStageActive && affectedCount > 0;
+    return get(fieldVisibility) && affectedCount > 0;
   },
 });

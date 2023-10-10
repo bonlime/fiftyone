@@ -30,7 +30,7 @@ export interface RouteData<T extends OperationType> {
   variables: VariablesOf<T>;
 }
 
-interface FiftyOneLocation extends Location {
+export interface FiftyOneLocation extends Location {
   state: LocationState<OperationType>;
 }
 

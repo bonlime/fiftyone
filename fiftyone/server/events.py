@@ -31,6 +31,7 @@ from fiftyone.core.session.events import (
     SelectLabels,
     SelectSamples,
     SetColorScheme,
+    SetFieldVisibility,
     SetGroupSlice,
     SetSpaces,
     StateUpdate,
@@ -81,6 +82,12 @@ async def dispatch_event(
 
     if isinstance(event, SetSpaces):
         _state.spaces = event.spaces
+
+    if isinstance(event, SetFieldVisibility):
+        _state.field_visibility = {
+            "cls": event.cls,
+            "field_names": event.field_names,
+        }
 
     if isinstance(event, SetGroupSlice):
         if _state.view is not None:

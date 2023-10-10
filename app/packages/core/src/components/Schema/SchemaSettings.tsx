@@ -4,11 +4,11 @@ import { useOutsideClick } from "@fiftyone/state";
 import CloseIcon from "@mui/icons-material/Close";
 import { Box, Typography } from "@mui/material";
 import { Fragment, useCallback, useRef } from "react";
+import { useRecoilState } from "recoil";
 import styled from "styled-components";
 import { TabOption } from "../utils";
 import { SchemaSearch } from "./SchemaSearch";
 import { SchemaSelection } from "./SchemaSelection";
-import { useRecoilState } from "recoil";
 
 const ModalWrapper = styled.div`
   position: fixed;
@@ -80,10 +80,10 @@ const SchemaSettings = () => {
 
   const { setViewToFields: setSelectedFieldsStage } =
     fos.useSetSelectedFieldsStage();
+
   const [fieldVisibilityState, setFieldVisibilityStage] = useRecoilState(
-    fos.fieldVisibilityStage
+    fos.fieldVisibility
   );
-  console.log("fieldVisibilityState", fieldVisibilityState);
 
   const { resetAttributeFilters } = fos.useSchemaSettings();
 
